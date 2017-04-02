@@ -39,8 +39,15 @@ k_range = range(1, 31)
 
 for k in k_range:
     knn = KNeighborsClassifier(n_neighbors=k)
-    scores = cross_val_score(knn, X, y, cv=5, scoring='accuracy')  # cv = 5 将数据分成五份交叉验证
+    scores = cross_val_score(knn, X, y, cv=5, scoring='accuracy')  # cv = 5 将数据分成五份交叉验证，classification 用 accuracy 比较好
     score_li.append(scores.mean())
 
-plt.plot(k_range, score_li)
+loss_li = []
+
+for k in k_range:
+    knn = KNeighborsClassifier(n_neighbors=k)
+    loss = -cross_val_score(knn, X, y, cv=5, scoring='neg_mean_squared_error')  # cv = 5 将数据分成五份交叉验证，regression 用 mean_squared_error 比较好
+    loss_li.append(loss.mean())
+
+plt.plot(k_range, loss_li)
 plt.show()
